@@ -17,32 +17,22 @@ namespace MongoDB.Infra.Data.Base.Repositories
             Filter = new FilterDefinitionBuilder<T>();
         }
 
-        protected async Task<T> Save(T entity)
+        public virtual async Task<T> Create (T entity)
         {
-
-            if (entity.Id == null)
-            {
-                entity.Id = ObjectId.GenerateNewId().ToString();
-                await MongoCollection.InsertOneAsync(entity);
-                return entity;
-            }
-            else
-            {
-                return await MongoCollection.FindOneAndReplaceAsync<T>(Filter.Eq(x => x.Id, entity.Id), entity);
-            }
-
+            await MongoCollection.InsertOneAsync(entity);
+            return entity;
         }
 
-        protected async Task<bool> Remove(T entity)
+        public abstract Task<T> Update(T entity);
+
+        public virtual async Task<bool> Delete (T entity)
         {
-
-            //var retorn = await MongoCollection.FindOneAndDeleteAsync(Filter.Eq(x => x.Id, entity.Id));
-
+            var retorn = await MongoCollection.DeleteOneAsync(x => x.Equals(entity));
             return true;
         }
 
 
-        protected async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             var t = await MongoCollection.FindAsync(Filter.Empty);
             return t.ToListAsync().Result;
@@ -51,9 +41,9 @@ namespace MongoDB.Infra.Data.Base.Repositories
 
     public abstract class Repository
     {
-        protected readonly IMongoDatabase _db;
+        public readonly IMongoDatabase _db;
 
-        protected Repository(IDataContext context)
+        public Repository(IDataContext context)
         {
             _db = context.Connect();
         }
