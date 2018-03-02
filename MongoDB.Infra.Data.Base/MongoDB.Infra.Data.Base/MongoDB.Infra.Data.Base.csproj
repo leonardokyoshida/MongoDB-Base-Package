@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Authors>Evo</Authors>
+    <Authors>Evo4Systems</Authors>
     <Company>Evo4Systems</Company>
     <Product>MongoDbBase</Product>
     <NeutralLanguage>pt-BR</NeutralLanguage>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
     <RepositoryUrl>https://github.com/leonardokyoshida/MongoDB-Base-Package</RepositoryUrl>
+    <Description>Package for basic implemention easily repository pattern in MongoDB.</Description>
+    <PackageReleaseNotes>Alter methods name in Typed Repository for padronization.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
