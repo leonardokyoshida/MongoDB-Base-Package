@@ -6,6 +6,8 @@
     <Company>Evo4Systems</Company>
     <Product>MongoDbBase</Product>
     <NeutralLanguage>pt-BR</NeutralLanguage>
+    <Version>1.0.0.1</Version>
+    <RepositoryUrl>https://github.com/leonardokyoshida/MongoDB-Base-Package</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
