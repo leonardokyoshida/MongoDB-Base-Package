@@ -1,12 +1,11 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Infra.Data.Base.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MongoDB.Infra.Data.Base.Repositories
 {
-    public abstract class TypedRepository<T> : Repository 
+    public abstract class TypedRepository<T> : Repository
     {
         public IMongoCollection<T> MongoCollection { get; }
         public FilterDefinitionBuilder<T> Filter { get; }
@@ -14,28 +13,28 @@ namespace MongoDB.Infra.Data.Base.Repositories
         public TypedRepository(string collectionName, IDataContext dataContext) : base(dataContext)
         {
             MongoCollection = _db.GetCollection<T>(collectionName);
-            Filter = new FilterDefinitionBuilder<T>();
+            Filter = Builders<T>.Filter;
         }
 
-        public virtual async Task<T> Create (T entity)
+        public virtual async Task<T> InsertAsync(T entity)
         {
             await MongoCollection.InsertOneAsync(entity);
             return entity;
         }
 
-        public abstract Task<T> Update(T entity);
+        public abstract Task<T> UpdateAsync(T entity);
 
-        public virtual async Task<bool> Delete (T entity)
+        public virtual async Task<bool> DeleteAsync(T entity)
         {
-            var retorn = await MongoCollection.DeleteOneAsync(x => x.Equals(entity));
-            return true;
+            var result = await MongoCollection.DeleteOneAsync(x => x.Equals(entity));
+            return result.IsAcknowledged;
         }
 
 
-        public virtual async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             var t = await MongoCollection.FindAsync(Filter.Empty);
-            return t.ToListAsync().Result;
+            return await t.ToListAsync();
         }
     }
 
