@@ -9,20 +9,23 @@ namespace MongoDB.Infra.Data.Base.DataContext
     public abstract class BaseDataContext : IDataContext
     {
         public string ConnectionString { get; }
-        public string DataBase { get; }
+        public string DataBaseName { get; }
 
-        protected BaseDataContext(string dataBase, string connectionString = "mongodb://localhost:27017")
+        protected BaseDataContext(string dataBaseName, string connectionString = "mongodb://localhost:27017")
         {
-            DataBase = dataBase;
+            DataBaseName = dataBaseName;
             ConnectionString = connectionString;
         }
 
         public IMongoDatabase Connect()
         {
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(this.ConnectionString));
-            var client = new MongoClient(settings);
 
-            var database = client.GetDatabase(this.DataBase);
+
+            var client = new MongoClient(settings);
+            
+            
+            var database = client.GetDatabase(this.DataBaseName);
 
             //Chamar mapeamentos aqui
 

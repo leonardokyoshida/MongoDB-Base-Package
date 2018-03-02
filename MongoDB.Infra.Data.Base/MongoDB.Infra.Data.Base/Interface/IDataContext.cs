@@ -8,7 +8,7 @@ namespace MongoDB.Infra.Data.Base.Interface
     public interface IDataContext
     {
         string ConnectionString { get; }
-        string DataBase{ get; }
+        string DataBaseName{ get; }
 
         IMongoDatabase Connect();
     }
